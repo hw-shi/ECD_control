@@ -274,7 +274,7 @@ class BatchOptimizer(VisualizationMixin):
         expm_p = tf.linalg.diag(tf.math.exp(-1j * re_a * self._eig_p))
         expm_c = tf.linalg.diag(tf.math.exp(-0.5 * re_a * im_a * self._qp_comm))
 
-        # Apply Baker-Campbell-Hausdorff
+        # Apply Baker-Campbell-Hausdorff # hwnote2
         return tf.cast(
             self._U_q
             @ expm_q
@@ -428,7 +428,7 @@ class BatchOptimizer(VisualizationMixin):
         psis = tf.stack([self.initial_states] * self.parameters["N_multistart"])
         for U in bs:
             psis = tf.einsum(
-                "mij,msjk->msik", U, psis
+                "mij,msjk->msik", U, psis  # hwnote1
             )  # m: multistart, s:multiple states
         overlaps = self.target_states_dag @ psis  # broadcasting
         overlaps = tf.reduce_mean(overlaps, axis=1)
